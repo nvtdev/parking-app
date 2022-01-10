@@ -18,7 +18,7 @@ export async function addParkEntryController(req: Request, res: Response) {
 
 export async function getCurrentBillController(req: Request, res: Response) {
   const currentBill = await getCurrentBill(req.body);
-  if (currentBill !== undefined) {
+  if (currentBill !== null) {
     return res.send(currentBill.toString());
   } else {
     return res.send("Vehicle with that registration number is not found.");
@@ -27,7 +27,7 @@ export async function getCurrentBillController(req: Request, res: Response) {
 
 export async function exitParkingController(req: Request, res: Response) {
   const currentBill = await exitParking(req.body);
-  if (currentBill !== undefined) {
+  if (currentBill !== null) {
     return res.send(`You exited the parking. You owe: ${currentBill}`);
   } else {
     return res.send("Vehicle with that registration number is not found.");

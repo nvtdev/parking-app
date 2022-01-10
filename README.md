@@ -4,6 +4,8 @@ A parking app REST API built using Mongo, Node, Express and TypeScript. Paramete
 
 Use **npm run app** to start the project.
 
+App runs is set to run on **port 4000**. It expects MongoDB server to run on **port 27017**, full Mongo configuration can be found in src/db/connect.ts.
+
 - **GET /freeParkingSpots** - returns the number of free spots in the parking
 
 - **GET /currentBill** - returns the bill a vehicle has accumulated so far, example parameters:

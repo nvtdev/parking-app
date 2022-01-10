@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { addParkEntryType } from "../schema/parkEntry.schema";
 import {
   addParkEntry,
   getFreeParkingSpots,
@@ -9,8 +8,8 @@ import {
 
 export async function addParkEntryController(req: Request, res: Response) {
   try {
-    const parkEntry = await addParkEntry(req.body);
-    return res.send("Park Entry added.");
+    const result = await addParkEntry(req.body);
+    return res.send(result);
   } catch (e: any) {
     console.error(e);
     return res.status(409).send(e.message);
@@ -19,7 +18,7 @@ export async function addParkEntryController(req: Request, res: Response) {
 
 export async function getCurrentBillController(req: Request, res: Response) {
   const currentBill = await getCurrentBill(req.body);
-  if (currentBill) {
+  if (currentBill !== undefined) {
     return res.send(currentBill.toString());
   } else {
     return res.send("Vehicle with that registration number is not found.");
@@ -28,7 +27,7 @@ export async function getCurrentBillController(req: Request, res: Response) {
 
 export async function exitParkingController(req: Request, res: Response) {
   const currentBill = await exitParking(req.body);
-  if (currentBill) {
+  if (currentBill !== undefined) {
     return res.send(`You exited the parking. You owe: ${currentBill}`);
   } else {
     return res.send("Vehicle with that registration number is not found.");

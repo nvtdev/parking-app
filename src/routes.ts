@@ -1,4 +1,4 @@
-import { Express, Request, Response } from "express";
+import { Express } from "express";
 import validate from "./middleware/validateParkEntry";
 import { addParkEntrySchema } from "./schema/parkEntry.schema";
 import {
@@ -7,7 +7,6 @@ import {
   getFreeParkingSpotsController,
   exitParkingController,
 } from "./controller/parkEntry.controller";
-import { exitParking } from "./service/parkEntry.service";
 
 function routes(app: Express) {
   app.get("/freeParkingSpots", getFreeParkingSpotsController);

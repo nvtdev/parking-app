@@ -1,11 +1,10 @@
-import { FilterQuery } from "mongoose";
 import ParkEntryModel, {
   ParkEntryDocument,
   ParkEntryInput,
   GetCurrentBillInput,
 } from "../model/parkEntry.model";
 
-const MAX_PARKING_SPOTS = 200;
+const MAX_PARKING_SPOTS = 1;
 
 export async function addParkEntry(input: ParkEntryInput): Promise<string> {
   try {
@@ -20,9 +19,9 @@ export async function addParkEntry(input: ParkEntryInput): Promise<string> {
     const freeParkingSpots = await getFreeParkingSpots();
     if (freeParkingSpots >= input.spotsRequired) {
       const parkEntry = await ParkEntryModel.create(input);
-      return "Park Entry added to db";
+      return "Park Entry added.";
     } else {
-      throw new Error("Parking is full");
+      return "Parking is full";
     }
   } catch (e: any) {
     throw new Error(e);
@@ -46,7 +45,6 @@ export async function exitParking(
     const deletedCount = await ParkEntryModel.deleteOne({
       registrationNumber: input.registrationNumber,
     });
-    console.log(deletedCount);
     return currentBill;
   } else {
     return null;
@@ -114,19 +112,11 @@ function getVehicle(regNumber: string): Promise<ParkEntryDocument> {
   return new Promise((resolve, reject) => {
     ParkEntryModel.findOne({
       registrationNumber: regNumber,
-    }).exec((err, value) => resolve(value));
+    }).exec((err, value) => {
+      resolve(value);
+    });
   });
 }
-
-// function getCreatedDate(regNumber: string): Promise<Date> {
-//   return new Promise((resolve, reject) => {
-//     ParkEntryModel.findOne({
-//       registrationNumber: regNumber,
-//     })
-//       .select("createdAt")
-//       .exec((err, value) => resolve(value.createdAt));
-//   });
-// }
 
 function countOccupiedParkingSpots(): Promise<number> {
   return new Promise((resolve, reject) => {

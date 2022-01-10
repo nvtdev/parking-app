@@ -49,7 +49,11 @@ export async function exitParking(
     const deletedCount = await ParkEntryModel.deleteOne({
       registrationNumber: input.registrationNumber,
     });
-    return currentBill;
+    if (deletedCount.deletedCount === 1) {
+      return currentBill;
+    } else {
+      return null;
+    }
   } else {
     return null;
   }
@@ -88,24 +92,23 @@ export function calculateBill(vehicle: ParkEntryDocument): number {
   }
 
   let currentBill = 0;
-  switch (vehicle.category.toUpperCase()) {
-    case "A":
-      currentBill = dayHours * 3 + nightHours * 2;
-    case "B":
-      currentBill = dayHours * 6 + nightHours * 4;
-    case "C":
-      currentBill = dayHours * 12 + nightHours * 8;
+  const category = vehicle.category.toUpperCase();
+  if (category === "A") {
+    currentBill = dayHours * 3 + nightHours * 2;
+  } else if (category === "B") {
+    currentBill = dayHours * 6 + nightHours * 4;
+  } else {
+    currentBill = dayHours * 12 + nightHours * 8;
   }
 
-  // apply discount
   if (vehicle.discountCard) {
-    switch (vehicle.discountCard.toUpperCase()) {
-      case "SILVER":
-        currentBill = currentBill * 0.9;
-      case "GOLD":
-        currentBill = currentBill * 0.85;
-      case "PLATINUM":
-        currentBill = currentBill * 0.8;
+    const discountCard = vehicle.discountCard.toUpperCase();
+    if (discountCard === "SILVER") {
+      currentBill = currentBill * 0.9;
+    } else if (discountCard === "GOLD") {
+      currentBill = currentBill * 0.85;
+    } else {
+      currentBill = currentBill * 0.8;
     }
   }
 

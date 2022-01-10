@@ -22,6 +22,7 @@ const ParkEntrySchema = new mongoose.Schema(
     registrationNumber: { type: String, required: true, unique: true },
     category: { type: String, required: true },
     discountCard: { type: String, required: false },
+    spotsRequired: { type: Number, required: false },
   },
   { timestamps: true }
 );

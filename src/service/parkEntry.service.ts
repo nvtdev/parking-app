@@ -4,24 +4,28 @@ import ParkEntryModel, {
   GetCurrentBillInput,
 } from "../model/parkEntry.model";
 
-const MAX_PARKING_SPOTS = 1;
+const MAX_PARKING_SPOTS = 200;
 
 export async function addParkEntry(input: ParkEntryInput): Promise<string> {
   try {
-    switch (input.category.toUpperCase()) {
-      case "A":
-        input.spotsRequired = 1;
-      case "B":
-        input.spotsRequired = 2;
-      case "C":
-        input.spotsRequired = 4;
+    const category = input.category.toUpperCase();
+    if (category === "A") {
+      input.spotsRequired = 1;
+    } else if (category === "B") {
+      input.spotsRequired = 2;
+    } else {
+      input.spotsRequired = 4;
     }
     const freeParkingSpots = await getFreeParkingSpots();
     if (freeParkingSpots >= input.spotsRequired) {
       const parkEntry = await ParkEntryModel.create(input);
-      return "Park Entry added.";
+      if (parkEntry) {
+        return "Park Entry added.";
+      } else {
+        return "Error adding park entry.";
+      }
     } else {
-      return "Parking is full";
+      return "Parking is full.";
     }
   } catch (e: any) {
     throw new Error(e);
